@@ -51,10 +51,10 @@ struct Args {
     #[arg(long, default_value_t = false)]
     audio: bool,
 
-    /// 是否在采集时绘制鼠标指针。默认启用（视频中可见鼠标）。
-    /// 注意：Windows gdigrab 捕获时本地鼠标可能会闪烁，这是正常现象，不影响录制质量。
-    #[arg(long, default_value_t = true)]
-    draw_mouse: bool,
+    /// 禁用鼠标指针显示（使用 Desktop Duplication API 高性能模式）。
+    /// 默认：显示鼠标（使用 gdigrab）
+    #[arg(long, default_value_t = false)]
+    no_mouse: bool,
 
     /// 音频设备名称（可选）
     #[arg(long)]
@@ -89,7 +89,7 @@ async fn main() -> Result<()> {
         device: args.device.clone(),
         audio_enabled: args.audio,
         audio_device: args.audio_device.clone(),
-        draw_mouse: args.draw_mouse,
+        draw_mouse: !args.no_mouse,  // 反转 no_mouse 标志
         fps: args.fps,
         resolution: args.resolution.clone(),
         bitrate: args.bitrate.clone(),
@@ -117,7 +117,7 @@ async fn main() -> Result<()> {
         #[cfg(target_os = "windows")]
         {
             // 如果需要显示鼠标，使用 gdigrab（支持鼠标绘制）
-            if args.draw_mouse && !args.use_gdigrab {
+            if !args.no_mouse && !args.use_gdigrab {
                 info!("🖱️  需要显示鼠标，使用 gdigrab（包含鼠标指针）");
                 stream::start_streaming(config).await?;
             } else if !args.use_gdigrab && native_capture::is_desktop_duplication_available() {
@@ -150,7 +150,7 @@ async fn main() -> Result<()> {
         #[cfg(target_os = "windows")]
         {
             // 如果需要显示鼠标，使用 gdigrab
-            if args.draw_mouse && !args.use_gdigrab {
+            if !args.no_mouse && !args.use_gdigrab {
                 info!("🖱️  需要显示鼠标，使用 gdigrab（包含鼠标指针）");
                 screen_capture::start_recording(config).await?;
             } else if !args.use_gdigrab && native_capture::is_desktop_duplication_available() {

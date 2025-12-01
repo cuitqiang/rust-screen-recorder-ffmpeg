@@ -24,8 +24,14 @@
 # 录制视频（包含鼠标）
 cargo run -- --output video.mp4 --duration 30
 
-# 推流（包含鼠标）
-cargo run -- --output rtsp://127.0.0.1:8554/stream --stream
+# 推流 RTSP（包含鼠标）
+cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --duration 3600
+
+# 推流 RTMP（包含鼠标）
+cargo run -- --output rtmp://127.0.0.1/live/stream --stream
+
+# 无限时长推流
+cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --duration 0
 ```
 
 **特点**：
@@ -36,32 +42,58 @@ cargo run -- --output rtsp://127.0.0.1:8554/stream --stream
 
 ### 2. 不显示鼠标（高性能模式）
 
-如果不需要鼠标指针，可以禁用：
+使用 Desktop Duplication API，性能更高但不显示鼠标：
 
 ```powershell
-# 方式1: 使用 --draw-mouse 参数
-cargo run -- --output video.mp4 --draw-mouse false --duration 30
+# 录制视频（无鼠标，高性能）
+cargo run -- --output video.mp4 --duration 60 --no-mouse
 
-# 方式2: 这会自动切换到 Desktop Duplication API
+# RTSP 推流（无鼠标，高性能）
+cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --duration 3600 --no-mouse
+
+# RTMP 推流（无鼠标，高性能）
+cargo run -- --output rtmp://127.0.0.1/live/stream --stream --no-mouse
 ```
 
 **特点**：
 - ✅ 无本地鼠标闪烁
-- ✅ 性能更高
+- ✅ 性能更高（CPU 占用低 30-50%）
 - ❌ 视频中不显示鼠标
 
 ---
 
-### 3. 强制使用特定模式
+### 3. 自定义参数
 
-#### 强制使用 Desktop Duplication API（无鼠标）
+#### 自定义分辨率和帧率
 ```powershell
-cargo run -- --output video.mp4 --draw-mouse false --duration 30
+# 720p 60fps 录制
+cargo run -- --output video.mp4 --resolution 1280x720 --fps 60 --bitrate 8000k --duration 120
+
+# 4K 30fps 推流
+cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --resolution 3840x2160 --bitrate 15000k
+```
+
+#### 带音频录制
+```powershell
+# 录制视频 + 麦克风音频
+cargo run -- --output video.mp4 --audio --duration 60
+
+# 指定音频设备
+cargo run -- --output video.mp4 --audio --audio-device "麦克风 (Realtek High Definition Audio)" --duration 60
 ```
 
 #### 强制使用 gdigrab（有鼠标）
 ```powershell
 cargo run -- --output video.mp4 --use-gdigrab --duration 30
+```
+
+#### 调整日志级别
+```powershell
+# 调试模式（详细日志）
+cargo run -- --output video.mp4 --duration 30 --log-level debug
+
+# 安静模式（只显示错误）
+cargo run -- --output video.mp4 --duration 30 --log-level error
 ```
 
 ---
@@ -88,8 +120,8 @@ cargo run -- --output demo.mp4 --use-gdigrab --duration 60
 
 ```powershell
 # 禁用鼠标显示
-cargo run -- --output monitor.mp4 --draw-mouse false --duration 0
-cargo run -- --output rtsp://192.168.1.100:8554/stream --stream --draw-mouse false
+cargo run -- --output monitor.mp4 --no-mouse --duration 0
+cargo run -- --output rtsp://192.168.1.100:8554/stream --stream --no-mouse
 ```
 
 ---
@@ -103,7 +135,7 @@ cargo run -- --output rtsp://192.168.1.100:8554/stream --stream --draw-mouse fal
 **解决方案**：
 ```powershell
 # 方案1: 改用 Desktop Duplication API（无鼠标）
-cargo run -- --output video.mp4 --draw-mouse false --duration 30
+cargo run -- --output video.mp4 --no-mouse --duration 30
 
 # 方案2: 忽略闪烁（仅本地显示问题，录制文件正常）
 cargo run -- --output video.mp4 --duration 30
@@ -179,5 +211,5 @@ CPU占用:   10-20%
 cargo run -- --output tutorial.mp4 --duration 300
 
 # 监控推流（无鼠标，高性能）
-cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --draw-mouse false
+cargo run -- --output rtsp://127.0.0.1:8554/stream --stream --no-mouse
 ```
