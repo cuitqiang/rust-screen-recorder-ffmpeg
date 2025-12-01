@@ -1,5 +1,6 @@
 use thiserror::Error;
 
+#[allow(dead_code)]
 #[derive(Error, Debug)]
 pub enum RecorderError {
     #[error("无效的分辨率格式: {0}，应为 WIDTHxHEIGHT")]

@@ -17,6 +17,7 @@ pub struct RecorderConfig {
     pub bitrate: String,
     pub codec: String,
     pub duration: u32,
+    #[allow(dead_code)]
     pub is_stream: bool,
 
     /// 流媒体协议类型
