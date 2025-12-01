@@ -1,0 +1,155 @@
+# 🎥 屏幕录制工具 - 独立版本
+
+## 📦 文件说明
+
+- `screen_recorder.exe` - 主程序（1.36 MB）
+- `使用说明.txt` - 本文件
+- `快速启动.bat` - 快捷启动脚本
+
+## ⚠️ 运行前提
+
+**必须安装 FFmpeg！** 程序依赖 FFmpeg 进行编码。
+
+### FFmpeg 安装方法
+
+#### 方法1：自动检测（推荐）
+确保 `ffmpeg.exe` 在系统 PATH 中，或与本程序在同一目录。
+
+#### 方法2：手动下载
+1. 访问：https://github.com/BtbN/FFmpeg-Builds/releases
+2. 下载：ffmpeg-n6.1-latest-win64-gpl-6.1.zip
+3. 解压后将 `ffmpeg.exe` 复制到本程序目录
+
+#### 方法3：使用 Chocolatey
+```powershell
+choco install ffmpeg
+```
+
+---
+
+## 🚀 快速开始
+
+### 1. 录制视频（30秒，包含鼠标）
+```cmd
+screen_recorder.exe --output video.mp4 --duration 30
+```
+
+### 2. RTSP 推流（1小时）
+```cmd
+screen_recorder.exe --output rtsp://127.0.0.1:8554/stream --stream --duration 3600
+```
+
+### 3. 高性能模式（无鼠标）
+```cmd
+screen_recorder.exe --output video.mp4 --duration 60 --no-mouse
+```
+
+---
+
+## 📋 常用命令
+
+### 录制视频
+```cmd
+# 默认配置（1080p 30fps）
+screen_recorder.exe --output video.mp4 --duration 30
+
+# 720p 60fps 高帧率
+screen_recorder.exe --output video.mp4 --resolution 1280x720 --fps 60 --duration 60
+
+# 4K 高清
+screen_recorder.exe --output video.mp4 --resolution 3840x2160 --bitrate 15000k --duration 60
+```
+
+### RTSP 推流
+```cmd
+# 标准推流
+screen_recorder.exe --output rtsp://127.0.0.1:8554/stream --stream --duration 3600
+
+# 高性能推流（无鼠标）
+screen_recorder.exe --output rtsp://127.0.0.1:8554/stream --stream --no-mouse --duration 0
+```
+
+### RTMP 推流
+```cmd
+# 推流到 RTMP 服务器
+screen_recorder.exe --output rtmp://127.0.0.1/live/stream --stream
+```
+
+### 录制音频
+```cmd
+# 录制视频 + 麦克风
+screen_recorder.exe --output video.mp4 --audio --duration 60
+```
+
+---
+
+## 🎯 参数说明
+
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `--output` | 输出文件或流地址 | 必填 |
+| `--duration` | 录制时长（秒，0=无限） | 0 |
+| `--resolution` | 分辨率（如 1920x1080） | 1920x1080 |
+| `--fps` | 帧率 | 30 |
+| `--bitrate` | 比特率（如 5000k） | 5000k |
+| `--codec` | 编码器（h264/h265） | h264 |
+| `--stream` | 推流模式 | 否 |
+| `--audio` | 启用音频 | 否 |
+| `--no-mouse` | 禁用鼠标显示（高性能） | 否 |
+| `--log-level` | 日志级别（info/debug/error） | info |
+
+---
+
+## 💡 使用场景
+
+### 教程录制
+```cmd
+screen_recorder.exe --output tutorial.mp4 --duration 300
+```
+
+### 游戏录制
+```cmd
+screen_recorder.exe --output game.mp4 --fps 60 --bitrate 12000k --duration 600
+```
+
+### 远程监控
+```cmd
+screen_recorder.exe --output rtsp://192.168.1.100:8554/monitor --stream --resolution 1280x720 --fps 15 --no-mouse --duration 0
+```
+
+### 会议录制
+```cmd
+screen_recorder.exe --output meeting.mp4 --audio --duration 3600
+```
+
+---
+
+## 🆘 常见问题
+
+### Q: 提示找不到 FFmpeg？
+**A:** 下载 FFmpeg 并放到本程序目录，或添加到系统 PATH。
+
+### Q: 视频中看不到鼠标？
+**A:** 去掉 `--no-mouse` 参数，或确保没有使用高性能模式。
+
+### Q: 本地鼠标闪烁？
+**A:** 这是正常现象，录制文件不受影响。若需避免，使用 `--no-mouse` 参数。
+
+### Q: 推流连接失败？
+**A:** 确保 RTSP/RTMP 服务器已启动（如 MediaMTX、Nginx-RTMP）。
+
+### Q: CPU 占用过高？
+**A:** 使用 `--no-mouse` 参数启用高性能模式，或降低分辨率/帧率。
+
+---
+
+## 📞 技术支持
+
+- GitHub: https://github.com/cuitqiang/rust-screen-recorder-ffmpeg
+- 开发者: 崔哥 @ 辰粤科技
+
+---
+
+**版本**: v1.0.0  
+**构建时间**: 2025-12-01  
+**License**: MIT
