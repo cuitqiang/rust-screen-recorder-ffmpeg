@@ -1,60 +1,85 @@
-# 🎬 Screen Recorder - FFmpeg 屏幕录制和推流工具
+# 🎬 Screen Recorder FFmpeg
 
 ![Rust](https://img.shields.io/badge/Rust-1.70%2B-orange)
-![License](https://img.shields.io/badge/License-MIT-blue)
-![FFmpeg](https://img.shields.io/badge/FFmpeg-7.0-blue)
+![Windows](https://img.shields.io/badge/Windows-10%2F11-blue)
+![FFmpeg](https://img.shields.io/badge/FFmpeg-6.0%2B-green)
 
-一个高性能的 Rust 屏幕录制和推流工具，基于 FFmpeg 库。支持本地录制和 RTMP 推流，提供灵活的编码选项和实时监控。
+**基于 Rust 和 FFmpeg 的高性能屏幕录制/推流工具**
+
+使用 **Windows Desktop Duplication API** 实现无鼠标闪烁的高质量屏幕捕获，支持 RTSP/RTMP 推流和本地录制。
 
 ## ✨ 功能特性
 
-### 核心功能
-- 🎥 **屏幕录制** - 支持本地视频文件保存
-- 🌐 **RTMP 推流** - 直播流推送到服务器
-- 📹 **多编码器** - 支持 H.264、H.265、硬件加速编码
-- ⚙️ **灵活配置** - 自定义分辨率、帧率、比特率
-- 📊 **实时监控** - 推流统计和性能指标
-- 🖥️ **跨平台** - Windows、Linux、macOS 支持
-
-### 编码选项
-- ✅ **H.264 (libx264)** - 兼容性最好
-- ✅ **H.265 (libx265)** - 更好的压缩率
-- ✅ **NVIDIA NVENC** - GPU 硬件加速
-- ✅ **Intel QSV** - Intel 快速同步
-- ✅ **Apple VideoToolbox** - macOS GPU 加速
+- 🚀 **双捕获模式**
+  - **Desktop Duplication API**: 高性能、无本地鼠标闪烁（视频中不显示鼠标）
+  - **gdigrab**: 包含鼠标指针、功能完整（可能有本地闪烁）
+- 📺 **多协议支持** - RTSP / RTMP / 本地文件
+- 🎯 **精确帧率控制** - 高精度帧率同步（<1ms 误差）
+- 🎙️ **音频采集** - 支持同步录制音频（可选）
+- ⚙️ **灵活配置** - 分辨率、码率、编码器可调
+- 📊 **实时监控** - 捕获状态和 FFmpeg 日志输出
+- 🖱️ **智能选择** - 自动根据需求选择最佳捕获方式
 
 ## 🚀 快速开始
 
-### 前置要求
-- Rust 1.70 或更新版本
-- FFmpeg 4.0 或更新版本
-- Windows / Linux / macOS
+### 📋 系统要求
 
-### 安装 FFmpeg
+#### 必需
+- **操作系统**: Windows 10/11 (Desktop Duplication API)
+- **Rust 工具链**: 1.70+
+- **FFmpeg**: 6.0+ (需在系统 PATH 中)
 
-**Windows:**
+#### 可选
+- **RTSP 服务器**: MediaMTX / VLC
+- **RTMP 服务器**: Nginx-RTMP / SRS
+
+### 🔧 安装步骤
+
+#### 1. 安装 Rust
+```powershell
+# 访问 https://rustup.rs/ 下载安装
+# 或使用 winget
+winget install Rustlang.Rustup
+```
+
+#### 2. 安装 FFmpeg
 ```powershell
 # 使用 Chocolatey
 choco install ffmpeg
 
-# 或从官网下载: https://ffmpeg.org/download.html
+# 或使用 Scoop
+scoop install ffmpeg
+
+# 验证安装
+ffmpeg -version
 ```
 
-**Linux (Ubuntu/Debian):**
-```bash
-sudo apt-get install ffmpeg
+#### 3. 克隆/下载项目
+```powershell
+cd H:\Desktop\screen_recorder_ffmpeg
 ```
 
-**macOS:**
-```bash
-brew install ffmpeg
-```
+#### 4. 构建项目
+```powershell
+# 使用便捷脚本（推荐）
+.\build.ps1          # 调试版本
+.\build.ps1 release  # 发布版本（性能优化）
 
-### 编译项目
-
-```bash
-cd screen_recorder_ffmpeg
+# 或使用 cargo
 cargo build --release
+```
+
+### ⚡ 快速运行
+
+```powershell
+# 查看使用示例
+.\run.ps1
+
+# 录制 10 秒视频
+.\run.ps1 --output test.mp4 --duration 10
+
+# 推流到 RTSP 服务器
+.\run.ps1 --output rtsp://127.0.0.1:8554/stream --stream --duration 30
 ```
 
 ## 📖 使用示例

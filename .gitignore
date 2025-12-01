@@ -1,1 +1,33 @@
-/target
+# Rust 编译产物
+/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo 锁文件（库项目通常不提交，但二进制项目可以提交）
+# Cargo.lock
+
+# IDE 配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 测试输出文件
+*.mp4
+*.flv
+*.mkv
+*.avi
+test_*
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
